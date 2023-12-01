@@ -41,7 +41,7 @@ def convertFileToXml(XMLInput, iterpath, wavrootpath):
     for root , dirs, files in os.walk(iterpath):
         for name in files:
             if name.endswith(".wav") or name.endswith(".WAV"):
-                tempElement = ElementTree.Element('Source', {"Path": os.path.join(wavrootpath, root[2:], name), "Destination": name[:-4]+".wem"})
+                tempElement = ElementTree.Element('Source', {"Path": os.path.join(wavrootpath, root[2:], name), "Destination": os.path.join(root[2:], name[:-4]+".wem")})
                 XMLInput.append(tempElement)
                 print(name + "written")
 
@@ -50,15 +50,17 @@ def convertFileToXml(XMLInput, iterpath, wavrootpath):
 
 #outpath = input("output path")
 #filepath = './'
-for path , dirs, files in os.walk("./"):
-        for name in files:
-            if name.endswith(".wsources"):
-                tree = ElementTree.parse(os.path.join(path, name))
-                root = tree.getroot()  # 得到根元素，Element类
+##for path , dirs, files in os.walk("./"):
+        ##for name in files:
+            ##if name.endswith(".wsources"):
+                ##tree = ElementTree.parse(os.path.join(path, name))
+                ##root = tree.getroot()  # 得到根元素，Element类
                 #elementList = []
-                convertFileToXml(root, "./", ".\\"+os.path.split(os.getcwd())[-1])
-                pretty_xml(root, '\t', '\n')  # 执行美化方法
-                tree.write('ExternalSourcesList.wsources', encoding='utf-8', xml_declaration=True)
-                break
+root = ElementTree.Element('ExternalSourcesList', {'SchemaVersion': '1', 'Root': '.\\'})
+convertFileToXml(root, "./", ".\\"+os.path.split(os.getcwd())[-1])
+pretty_xml(root, '\t', '\n')  # 执行美化方法
+tree = ElementTree.ElementTree(root)
+tree.write('ExternalSourcesList.wsources', encoding='utf-8', xml_declaration=True)
+                ##break
 #pretty_xml(root, '\t', '\n')  # 执行美化方法
 #tree.write('ExternalSourcesList.wsources', encoding='utf-8', xml_declaration=True)
